@@ -1,0 +1,256 @@
+Q1. Mutual Friend
+
+Mapper :
+	Input : user1	f1,f2,f3,f4,f5
+
+	Key : user1_f1 (if user1 < f1)
+	Value : f2,f3,f4,f5
+
+	Key : f2_user1 (if user1 > f1)
+	Value : f1,f3,f4,f5
+
+	etc
+
+	Input : f1	user1,f2,f3,f4,f6
+
+	Key : user1_f1 (if user1 < f1)
+	Value : f2,f3,f4,f6
+
+
+Reducer :
+	Key : user1_f1
+	Values : 
+	[
+		f2,f3,f4,f5 
+		f2,f3,f4,f6
+	]
+
+
+	Output : 
+	Key : user1_f1
+	Value : f2,f3,f4
+
+________________________________________________________________________________________________________________
+
+Q2. Top Mutual Friend
+
+Mapper :
+	Input : user1	f1,f2,f3,f4,f5
+
+	Key : user1_f1 (if user1 < f1)
+	Value : f2,f3,f4,f5
+
+	Key : f2_user1 (if user1 > f1)
+	Value : f1,f3,f4,f5
+
+	etc
+
+	Input : f1	user1,f2,f3,f4,f6
+
+	Key : user1_f1 (if user1 < f1)
+	Value : f2,f3,f4,f6
+
+
+Reducer :
+	Key : user1_f1
+	Values : 
+	[
+		f2,f3,f4,f5
+		f2,f3,f4,f6
+	]
+
+
+	Output : 
+	Key : user1_f1
+	Value : f2,f3,f4\t3 (friendList\tcount)
+
+
+Mapper :
+	Input : user1     f1    f2,f3,f4	3
+
+	Minheap to store top 10 depending on count
+
+	Cleanup :
+	Key : count
+	Value : user1    f1    f2,f3,f4
+
+Compartor :
+
+	SortInDescending Order
+
+Reducer :
+	Input : 
+		Key : count 
+		values : [Object(user1    f1    f2,f3,f4), ....] (Top 10 )
+	output :
+		values : [Object(user1    f1    f2,f3,f4), ....] (Top 10 )
+
+__________________________________________________________________________________________________________________
+
+Q3. MeanVariance 
+
+
+Mapper
+	sumOfNo += value
+	countOfNo += 1
+	sumSquareOfNo += value * value
+
+	CleanUp
+		emit null, (sumOfNo, countOfNo, sumSquareOfNo)
+ 
+Reducer
+
+	values = [(sumOfNo, countOfNo, sumSquareOfNo), (sumOfNo, countOfNo, sumSquareOfNo), (sumOfNo, countOfNo, sumSquareOfNo) , ...]
+	for value : values 
+	{
+		totalSum += sumOfNo
+		totalSumSquareOfNo += sumSquareOfNo
+		totalCount += countOfNo
+	}
+
+	Mean = totalSum / totalCount
+	X = square(totalSum)  / totalCount
+	Y = totalSumSquareOfNo - X
+	SD = square_root(Y / (totalCount -1) )
+	Variance = Square(SD)/totalCount
+
+___________________________________________________________________________________________________________________________
+
+Q4. MinMaxMedian
+
+
+Mapper
+	init
+		min = highest
+		max = lowest
+	Key : null
+	Value : v
+	
+	if(v < min ) 
+		min = v  
+	
+	if(v > max ) 
+		max = v  
+
+	//Used Deterministic Algorithm 
+	//Divides in array of 5
+	if(tempMedian.size() < 5) {
+		tempMedian.add(v);
+		
+	}
+	else {
+
+		//once array of 5 is formed , find its median (sort 5 elements and get middle elements)
+		//add in median list and initialized temp array and add current not added elemet
+
+		medianList.addAll(getMedian(tempMedian));
+		tempMedian = new ArrayList<Double>();
+		tempMedian.add(v);
+	}
+
+	getMedian 
+	{
+		//if array has 5 elements
+		//sort 5 elements and return middle element in medianList
+		//return medianList
+
+		//if array has even number of elements split array in odd elements 
+		//like if array has 4, split it in 3 and 1 and getMedian of 3 elemets array and add it to median List
+		//and also add remaning 1 element in median list
+		//return medianList
+
+		//like if array has 2,  2 elements in medianList, return medianList
+
+	}
+
+	CleanUp
+		//get median of last unprocessed list add its median to median list
+		//get medianOfMedian List
+
+		medianOfMedian
+		{
+			//recusively split medianList in 5 sort them and get median and add it to new median list
+			//now again if new median list has more than 2 elements 
+			//call medianOfMedian again on new medianList
+		}
+
+		emit 1, (min, max, medianlist)
+ 
+Reducer
+
+	values = [(min, max, medianlist), (min, max, medianlist), (min, max, medianlist) , ...]
+	for value : values 
+	{
+		totalSum += sumOfNo
+		totalSumSquareOfNo += sumSquareOfNo
+		totalCount += countOfNo
+	}
+
+	if(v < min ) 
+		min = v  
+	
+	if(v > max ) 
+		max = v  
+
+	medianOfMedian(all merged medianlists)
+
+	//finalMedianList will have atmost 2 values
+	//find the average of list 
+
+	(min, max, median)
+
+// http://www.ics.uci.edu/~eppstein/161/960130.html
+// This Deterministic algorithm return median to partition the array and sort on partition
+// partition is the median
+
+
+_________________________________________________________________________________________________________________________________
+
+Q5. Matrix Multiplication
+
+Mapper :
+A,i,j,val
+B,i,j,val
+
+	if A
+		Key : j
+		Value : A,i,j,val
+
+	if B
+		Key : i
+		Value : B,i,j,val
+
+Reducer :
+	Input :
+		Key : k
+		Values : [ (A,i,k,val), .... , (B,k,j,val) ]
+
+	HashMapA : (A,i,k,val)
+		Key : i
+		Value : (A,i,k,val)
+
+	HashMapB : (B,k,j,val)
+		Key : j
+		Value : (B,k,j,val)
+
+	//mulitply every A,i,k,val with Every B,k,j,val
+
+	for i in HashMapA
+		for j in HashMapB	
+			Output :
+				Key : i,j
+				Value : A,i,k,val * B,k,j,val
+
+Mapper2 :
+	Key : i,j
+	Value : A,i,k,val * B,k,j,val
+
+Reducer2 :
+	Input :
+		Key : i,j
+		Values : [ (A,i,k1,val * B,k1,j,val),  (A,i,k2,val * B,k2,j,val),  (A,i,k3,val * B,k3,j,val), .......]
+
+		sum = Sum all values 
+
+	Output :
+		X,i,j,sum

@@ -1,0 +1,45 @@
+tweet has :
+"text": "RT @PolticsNewz: Gloria Allred Withdraws From #Summer Zervos’s #Trump Defamation Suit https://t.co/3MrLRHHnir https://t.co/Qz9AWOSZvf",
+"user": {
+    "name": "Robert P Smith",
+    "screen_name": "TruckerBobS",
+    "location": "Wherever my rig is parked",
+    "description": "Conservative #nascar #tcot Love my 5 cockerspaniels http://gab.ai/@TruckerBobS 👈🏾FollowMeThereToo. I block bots & lists.",
+    "translator_type": "None",
+    "protected": "false",
+    "verified": "false",
+    "followers_count": 23314,
+    "friends_count": 23932,
+    "listed_count": 378,
+    "favourites_count": 79593,
+    "statuses_count": 236523,
+    "created_at": "Fri Apr 24 18:22:10 +0000 2009",
+    "utc_offset": -18000,
+    "time_zone": "Central Time (US & Canada)",
+    "geo_enabled": "true",
+    "lang": "en",
+ }
+
+"geo": "None",
+"coordinates": "None",
+"place": "None",
+"favorited": "false",
+"retweeted": "false",
+"possibly_sensitive": "false",
+"filter_level": "low",
+"lang": "en",
+"timestamp_ms": "1522515754514"
+
+
+        print("________tweet________")
+        my_json_string = json.dumps({"text": status.text, "geo": status.geo})
+        my_json = my_json_string.replace("'","").replace("\"","").replace("\n","")
+        dict = {"text": status.text, "geo": status.geo}
+        print(dict)
+        print("\n")
+        print(json.dumps(dict))
+        print("\n")
+        print(json.dumps(dict).encode('utf-8'))
+        conn.send(status.text.encode('utf-8'))
+        #conn.send(my_json_string.encode('utf-8'))
+        #conn.send(status.text.encode('utf-8'))

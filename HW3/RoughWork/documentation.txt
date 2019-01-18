@@ -1,0 +1,39 @@
+Stream.py #hashtags as input
+
+Tweet Has data 
+: Time, Location , Tweet, (other metadata : number of retweet, user, followers, likes , etc)
+
+Filter Out Data :
+1. #guncontrolnow
+2. remove emojos and special characters
+3. Remove noise.
+
+Final Data :
+1. Tweet
+2. location
+3. time
+4. hashTag of words
+
+Call geolocation APi to get its geolocation info
+
+Send 
+1. Text
+2. Time
+3. Location info 
+
+to Spark streaming
+
+Spark.py
+1. For each hashtag you perform sentiment annlysis using Stanford NLTK. 
+
+Output:
+1. Sentiment
+2. Text
+3. geolocation
+
+Json is sent to kibana
+
+
+Visualizer :
+
+1. 
